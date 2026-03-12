@@ -1,0 +1,66 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.5.0/schema.json",
+  "name": "81369f1b3fa2e3a6f878",
+  "position": {
+    "x": 14.364089775561096,
+    "y": 511.72069825436409,
+    "z": 14000,
+    "height": 176.857855361596,
+    "width": 233.41645885286783,
+    "tabOrder": 13000
+  },
+  "visual": {
+    "visualType": "tableEx",
+    "query": {
+      "queryState": {
+        "Values": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Calendario"
+                    }
+                  },
+                  "Property": "Date"
+                }
+              },
+              "queryRef": "Calendario.Date",
+              "nativeQueryRef": "Date"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Autoscaling"
+                    }
+                  },
+                  "Property": "Tablero"
+                }
+              },
+              "queryRef": "Autoscaling.Tablero",
+              "nativeQueryRef": "Tablero"
+            },
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "Autoscaling"
+                    }
+                  },
+                  "Property": "Usuario"
+                }
+              },
+              "queryRef": "Autoscaling.Usuario",
+              "nativeQueryRef": "Usuario"
+            }
+          ]
+        }
+      }
+    },
+    "drillFilterOtherVisuals": true
+  }
+}

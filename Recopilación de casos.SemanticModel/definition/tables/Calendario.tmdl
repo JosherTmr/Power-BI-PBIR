@@ -1,0 +1,101 @@
+table Calendario
+	lineageTag: 78eb83e9-46f9-49f2-8927-c19d4903309a
+	dataCategory: Time
+
+	column Date
+		isKey
+		formatString: General Date
+		lineageTag: 271d66a1-cf9e-416c-a6b9-db95a2e31a93
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Date]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Año
+		formatString: 0
+		lineageTag: e4c47301-6fb0-4072-a8c5-03c94939f1f4
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Año]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mes Num'
+		formatString: 0
+		lineageTag: 8a55e9ea-8fc9-4075-be42-e695ce569dc8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes Num]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Mes Nombre'
+		lineageTag: 5d9d4a88-8e2a-434c-9576-d21f9d552b22
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Mes Nombre]
+
+		annotation SummarizationSetBy = Automatic
+
+	column Trimestre
+		lineageTag: 71b0144a-c931-400f-ad3f-6ea323325bd0
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Trimestre]
+
+		annotation SummarizationSetBy = Automatic
+
+	column AñoMes
+		lineageTag: 74e4ce5c-b0ea-4e79-93eb-8bf0653196d8
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [AñoMes]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Semana Año'
+		formatString: 0
+		lineageTag: 6d163078-67be-4980-a032-20a50dee7f71
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Semana Año]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Día Semana'
+		formatString: 0
+		lineageTag: ea825fab-abac-4225-bb2b-314b60bf707e
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Día Semana]
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Nombre Día'
+		lineageTag: f5033865-392e-415b-a1c2-b843f3c76524
+		summarizeBy: none
+		isNameInferred
+		sourceColumn: [Nombre Día]
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Calendario = calculated
+		mode: import
+		source =
+				
+				ADDCOLUMNS (
+				    CALENDAR ( DATE ( 2019, 1, 1 ), DATE ( 2027, 12, 31 ) ), // <-- AJUSTA ESTAS FECHAS MIN y MAX para cubrir todo tu rango
+				    "Año", YEAR ( [Date] ),
+				    "Mes Num", MONTH ( [Date] ),
+				    "Mes Nombre", FORMAT ( [Date], "MMMM", "es-ES" ),
+				    "Trimestre", "T" & FORMAT ( [Date], "Q" ),
+				    "AñoMes", FORMAT ( [Date], "YYYY-MM" ),
+				    "Semana Año", WEEKNUM ( [Date], 1 ), // Lunes como inicio de semana
+				    "Día Semana", WEEKDAY ( [Date], 2 ), // 1=Lunes, 7=Domingo
+				    "Nombre Día", FORMAT ( [Date], "dddd", "es-ES" )
+				    // Puedes añadir más columnas útiles (festivos, etc.)
+				)
+
+	annotation PBI_Id = 4baa22569ba7435b88093b9e03718c17
+

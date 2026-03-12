@@ -1,0 +1,19 @@
+relationship 929dc383-a455-4900-ab6c-ee83aaebbe1f
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Todos.'Registration date'
+	toColumn: LocalDateTable_c5fc6224-db1d-4e9e-8ad5-2b5db7b8c1a9.Date
+
+relationship 3c040cf1-bab9-40e8-bc58-e5eca1707f47
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Todos.'Estimated Date of Solution'
+	toColumn: LocalDateTable_6af4a21c-40d0-4e89-bd27-8d66eb3348a6.Date
+
+relationship 4d76dcaa-5705-407c-84fd-c15fb10322c3
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Todos.'Estimated Date of Attention'
+	toColumn: LocalDateTable_8ee5fe01-d052-4e16-980d-ae870c237bf2.Date
+
+relationship 51855091-6310-2111-9a1f-10b747aad613
+	fromColumn: Todos.Fecha
+	toColumn: Calendario.Date
+

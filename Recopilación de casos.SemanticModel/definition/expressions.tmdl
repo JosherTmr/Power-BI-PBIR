@@ -1,0 +1,67 @@
+expression Parámetro1 = #"Archivo de ejemplo" meta [IsParameterQuery=true, BinaryIdentifier=#"Archivo de ejemplo", Type="Binary", IsParameterQueryRequired=true]
+	lineageTag: ad5b478d-fdaa-4750-96f8-67501570d958
+	queryGroup: 'Transformar archivo de Todos\Consultas auxiliares'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transformar archivo de ejemplo' =
+		let
+		    Origen = Excel.Workbook(Parámetro1, null, true),
+		    Items_Sheet = Origen{[Item="Items",Kind="Sheet"]}[Data],
+		    #"Encabezados promovidos" = Table.PromoteHeaders(Items_Sheet, [PromoteAllScalars=true])
+		in
+		    #"Encabezados promovidos"
+	lineageTag: c3242bbc-084b-425d-8453-f1f5240785d4
+	queryGroup: 'Transformar archivo de Todos'
+
+	annotation PBI_ResultType = Table
+
+expression 'Archivo de ejemplo' =
+		let
+		    Origen = Folder.Files("C:\Users\joshe\OneDrive - D1 S.A.S\Aranda\Todos"),
+		    Navegación1 = Origen{0}[Content]
+		in
+		    Navegación1
+	lineageTag: 6337d83b-4762-4eb2-b2f1-41dcc7d953b0
+	queryGroup: 'Transformar archivo de Todos\Consultas auxiliares'
+
+	annotation PBI_ResultType = Binary
+
+expression 'Transformar archivo' =
+		let
+		    Origen = (Parámetro1 as binary) => let
+		    Origen = Excel.Workbook(Parámetro1, null, true),
+		    Items_Sheet = Origen{[Item="Items",Kind="Sheet"]}[Data],
+		    #"Encabezados promovidos" = Table.PromoteHeaders(Items_Sheet, [PromoteAllScalars=true])
+		in
+		    #"Encabezados promovidos"
+		in
+		    Origen
+	lineageTag: 039ecf0c-2568-41ff-b38b-4ac4a172be0b
+	queryGroup: 'Transformar archivo de Todos\Consultas auxiliares'
+
+	annotation PBI_ResultType = Function
+
+expression Todos1 =
+		let
+		    Origen = Folder.Files("C:\Users\joshe\OneDrive - D1 S.A.S\Aranda\Todos"),
+		    #"Archivos ocultos filtrados1" = Table.SelectRows(Origen, each [Attributes]?[Hidden]? <> true),
+		    #"Invocar función personalizada1" = Table.AddColumn(#"Archivos ocultos filtrados1", "Transformar archivo", each #"Transformar archivo"([Content])),
+		    #"Columnas con nombre cambiado1" = Table.RenameColumns(#"Invocar función personalizada1", {"Name", "Source.Name"}),
+		    #"Otras columnas quitadas1" = Table.SelectColumns(#"Columnas con nombre cambiado1",{"Source.Name", "Date modified", "Transformar archivo"}),
+		    #"Columna de tabla expandida1" = Table.ExpandTableColumn(#"Otras columnas quitadas1", "Transformar archivo", Table.ColumnNames(#"Transformar archivo"(#"Archivo de ejemplo"))),
+		    #"Tipo cambiado" = Table.TransformColumnTypes(#"Columna de tabla expandida1",{{"Source.Name", type text}, {"Number Case", Int64.Type}, {"Composite id", type text}, {"Subject", type text}, {"Registration date", type datetime}, {"Status", type text}, {"Client", type text}, {"Category", type text}, {"Service", type text}, {"Responsable Name", type text}, {"Author", type text}, {"Reason", type text}, {"Impact", type text}, {"Urgency", type text}, {"PriorityName", type text}, {"Group Name", type text}, {"Company", type text}, {"CI", type any}, {"RegistryType", type text}, {"Estimated Date of Solution", type datetime}, {"Estimated Date of Attention", type datetime}, {"Hierarchy", type text}, {"Department", type text}, {"Floor", type any}, {"City", type text}, {"Country", type text}, {"Headquarters", type text}, {"Building", type any}, {"Time elapsed", Int64.Type}, {"Progress", Int64.Type}}),
+		    #"Filas ordenadas" = Table.Buffer(Table.Sort(#"Tipo cambiado",{{"Registration date", Order.Ascending}, {"Date modified", Order.Descending}})),
+		    #"Duplicados quitados" = Table.Distinct(#"Filas ordenadas", {"Composite id"}),
+		    #"Columnas quitadas" = Table.RemoveColumns(#"Duplicados quitados",{"Source.Name", "Date modified", "Reason", "Company", "CI", "Country", "Headquarters", "Building"}),
+		    #"Columna condicional agregada" = Table.AddColumn(#"Columnas quitadas", "Service Name", each if [Service] = "INC_Power BI" then "Incident" else "Service Call", type text),
+		    #"Personalizada agregada" = Table.AddColumn(#"Columna condicional agregada", "Personalizado", each Date.WeekOfYear(DateTime.Date([Registration date]))),
+		    #"Tipo cambiado1" = Table.TransformColumnTypes(#"Personalizada agregada",{{"Personalizado", Int64.Type}})
+		in
+		    #"Tipo cambiado1"
+	lineageTag: a3a97a41-464c-490b-b69c-e65390d373c3
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+

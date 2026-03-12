@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Recopilación de casos"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "2ee93aac-a164-4005-a4d2-0f56b7067cf8"
+  }
+}

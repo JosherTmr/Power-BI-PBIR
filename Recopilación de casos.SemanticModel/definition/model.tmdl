@@ -1,0 +1,46 @@
+model Model
+	culture: es-ES
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: es-CO
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+queryGroup 'Transformar archivo de Todos'
+
+	annotation PBI_QueryGroupOrder = 0
+
+queryGroup 'Transformar archivo de Todos\Consultas auxiliares'
+
+	annotation PBI_QueryGroupOrder = 0
+
+/// Errores en las consultas cargadas en 23/04/2025 2:56:39 p. m..
+queryGroup 'Errores en las consultas: 23/04/2025 2:56:39 p  m'
+
+	annotation PBI_QueryGroupOrder = 2
+
+/// Errores en las consultas cargadas en 23/04/2025 2:57:54 p. m..
+queryGroup 'Errores en las consultas: 23/04/2025 2:57:54 p  m'
+
+	annotation PBI_QueryGroupOrder = 3
+
+/// Errores en las consultas cargadas en 16/06/2025 11:11:42 a. m..
+queryGroup 'Errores en las consultas: 16/06/2025 11:11:42 a  m'
+
+	annotation PBI_QueryGroupOrder = 4
+
+annotation PBI_QueryOrder = ["Todos1","Parámetro1","Transformar archivo de ejemplo","Archivo de ejemplo","Transformar archivo","Todos"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Todos
+ref table DateTableTemplate_d40a90eb-a333-4b03-98ce-cc71eb990815
+ref table LocalDateTable_c5fc6224-db1d-4e9e-8ad5-2b5db7b8c1a9
+ref table LocalDateTable_6af4a21c-40d0-4e89-bd27-8d66eb3348a6
+ref table LocalDateTable_8ee5fe01-d052-4e16-980d-ae870c237bf2
+ref table Calendario
+
+ref cultureInfo es-ES
+

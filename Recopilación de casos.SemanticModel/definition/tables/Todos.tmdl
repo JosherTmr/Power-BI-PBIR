@@ -1,0 +1,342 @@
+table Todos
+	lineageTag: 3cdd3fa4-c147-45fd-a4bd-43a8c1189615
+
+	measure TotalCasesDividedByResolved =
+			
+			VAR TotalCases = COUNTROWS('Todos')
+			VAR ResolvedCases =
+			    CALCULATE(
+			        COUNTROWS('Todos'),
+			        'Todos'[Status] = "Solucionado" || 'Todos'[Status] = "Cerrado" || 'Todos'[Status] = "Cancelado"
+			    )
+			RETURN
+			    DIVIDE(ResolvedCases, TotalCases,  0)
+		lineageTag: c9bad072-2ca8-4a4c-bd4b-69cc99f7efb0
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure PorcentajeProgress = DIVIDE(MAX(Todos[Progress]),100)
+		lineageTag: 2e604998-1ad7-4aba-aae8-e0da23126f6f
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure Tiempo_100_HHMMSS = ```
+			
+			VAR TiempoTotal = DIVIDE(SELECTEDVALUE(Todos[Time elapsed]), SELECTEDVALUE(Todos[Progress]), 0) * 100
+			VAR Horas = INT(TiempoTotal / 60)
+			VAR Minutos = INT(MOD(TiempoTotal, 60))
+			VAR Segundos = ROUND((TiempoTotal - INT(TiempoTotal)) * 60, 0)
+			
+			RETURN 
+			FORMAT(Horas, "00") & ":" & FORMAT(Minutos, "00") & ":" & FORMAT(Segundos, "00")
+			
+			
+			```
+		lineageTag: 40a7f0de-887d-43e1-9618-e34fb38e8a44
+
+	measure ElapsedTimeFormatted = ```
+			
+			VAR TotalMinutes = Max(Todos[Time elapsed])
+			VAR Hours = INT(TotalMinutes / 60)
+			VAR Minutes = INT(MOD(TotalMinutes, 60))
+			VAR Seconds = ROUND((MOD(TotalMinutes, 1) * 60), 0)
+			RETURN
+			FORMAT(Hours, "00") & ":" & FORMAT(Minutes, "00") & ":" & FORMAT(Seconds, "00")
+			
+			```
+		lineageTag: 46c485cb-4b3b-4631-a1b0-a43f6d0db91d
+
+	measure 'Service Calls Count' = ```
+			
+			CALCULATE (
+			    DISTINCTCOUNT ( Todos[Composite id] ),
+			    Todos[Service Name] = "Service Call"
+			)
+			
+			```
+		formatString: 0
+		lineageTag: 53c3b491-8616-452d-82dc-467d53816f6a
+
+	measure 'Incidents Count' =
+			
+			CALCULATE (
+			    DISTINCTCOUNT ( Todos[Composite id] ),
+			    Todos[Service Name] = "Incident"
+			)
+		formatString: 0
+		lineageTag: de151c5f-da5f-4bcf-aaea-18d169c09b8a
+
+	column 'Number Case'
+		dataType: int64
+		formatString: 0
+		lineageTag: 721c2ac7-2c16-47cd-a240-a9d6d2a6c862
+		summarizeBy: sum
+		sourceColumn: Number Case
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Composite id'
+		dataType: string
+		lineageTag: 2028ac55-e5e7-4152-b21a-2a9000b2fcd7
+		summarizeBy: none
+		sourceColumn: Composite id
+
+		annotation SummarizationSetBy = Automatic
+
+	column Subject
+		dataType: string
+		lineageTag: 0dbfa001-7ed0-4879-8326-aaa301cdfe3d
+		summarizeBy: none
+		sourceColumn: Subject
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Registration date'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: fe213ef7-3b48-496c-805f-c49aad8977ef
+		summarizeBy: none
+		sourceColumn: Registration date
+
+		variation Variación
+			isDefault
+			relationship: 929dc383-a455-4900-ab6c-ee83aaebbe1f
+			defaultHierarchy: LocalDateTable_c5fc6224-db1d-4e9e-8ad5-2b5db7b8c1a9.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Status
+		dataType: string
+		lineageTag: 454ad8cf-4d48-4ba6-9d77-e6712c7d4de9
+		summarizeBy: none
+		sourceColumn: Status
+
+		annotation SummarizationSetBy = Automatic
+
+	column Client
+		dataType: string
+		lineageTag: 6ae82d4f-c928-483f-b53e-5fa67b7ecb18
+		summarizeBy: none
+		sourceColumn: Client
+
+		annotation SummarizationSetBy = Automatic
+
+	column Category
+		dataType: string
+		lineageTag: f859167a-2898-4057-b57f-009b1af405f6
+		summarizeBy: none
+		sourceColumn: Category
+
+		annotation SummarizationSetBy = Automatic
+
+	column Service
+		dataType: string
+		lineageTag: c83d4cc1-1b72-440c-b66e-4459b5c1ee43
+		summarizeBy: none
+		sourceColumn: Service
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Responsable Name'
+		dataType: string
+		lineageTag: 50ba0656-ae23-4262-ab8f-470da79c7226
+		summarizeBy: none
+		sourceColumn: Responsable Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Author
+		dataType: string
+		lineageTag: c4d4bebd-6ad3-4241-9fe3-6c440d677873
+		summarizeBy: none
+		sourceColumn: Author
+
+		annotation SummarizationSetBy = Automatic
+
+	column Impact
+		dataType: string
+		lineageTag: 3b83e5a9-4a2b-41d2-8d4e-abb724924647
+		summarizeBy: none
+		sourceColumn: Impact
+
+		annotation SummarizationSetBy = Automatic
+
+	column Urgency
+		dataType: string
+		lineageTag: 66dd3df5-d109-48ec-ac69-e3a559476ea1
+		summarizeBy: none
+		sourceColumn: Urgency
+
+		annotation SummarizationSetBy = Automatic
+
+	column PriorityName
+		dataType: string
+		lineageTag: 744198c2-8d39-4ee9-a583-04a91ead74e2
+		summarizeBy: none
+		sourceColumn: PriorityName
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Group Name'
+		dataType: string
+		lineageTag: 14d02025-4b1f-482b-9670-6a0f5b3defc2
+		summarizeBy: none
+		sourceColumn: Group Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column RegistryType
+		dataType: string
+		lineageTag: 398d898b-1d49-4b7b-b3b1-b5b0c2a11af7
+		summarizeBy: none
+		sourceColumn: RegistryType
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Estimated Date of Solution'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 4cb46ddb-f9e6-49da-9cf1-edd282d6bddb
+		summarizeBy: none
+		sourceColumn: Estimated Date of Solution
+
+		variation Variación
+			isDefault
+			relationship: 3c040cf1-bab9-40e8-bc58-e5eca1707f47
+			defaultHierarchy: LocalDateTable_6af4a21c-40d0-4e89-bd27-8d66eb3348a6.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Estimated Date of Attention'
+		dataType: dateTime
+		formatString: General Date
+		lineageTag: 3bb7eaaf-a748-4d02-b829-c633a8a4e170
+		summarizeBy: none
+		sourceColumn: Estimated Date of Attention
+
+		variation Variación
+			isDefault
+			relationship: 4d76dcaa-5705-407c-84fd-c15fb10322c3
+			defaultHierarchy: LocalDateTable_8ee5fe01-d052-4e16-980d-ae870c237bf2.'Jerarquía de fechas'
+
+		annotation SummarizationSetBy = Automatic
+
+	column Hierarchy
+		dataType: string
+		lineageTag: d1abca65-15b3-4ac2-b692-b0c2801e5574
+		summarizeBy: none
+		sourceColumn: Hierarchy
+
+		annotation SummarizationSetBy = Automatic
+
+	column Department
+		dataType: string
+		lineageTag: a1b0663e-42b2-4c0d-b66e-015b94c3e580
+		summarizeBy: none
+		sourceColumn: Department
+
+		annotation SummarizationSetBy = Automatic
+
+	column Floor
+		dataType: string
+		lineageTag: 1ab6cabb-6942-4b06-b724-f3daf462d500
+		summarizeBy: none
+		sourceColumn: Floor
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		lineageTag: ea161968-a550-462c-9f91-9570023c1fda
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Time elapsed'
+		dataType: int64
+		formatString: 0
+		lineageTag: da31258b-4d35-4c27-b03a-87b740ed08e7
+		summarizeBy: sum
+		sourceColumn: Time elapsed
+
+		annotation SummarizationSetBy = Automatic
+
+	column Progress
+		dataType: int64
+		formatString: 0
+		lineageTag: 9710e8ee-6c0d-40ff-b1e1-1d192a58812d
+		summarizeBy: sum
+		sourceColumn: Progress
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Service Name'
+		dataType: string
+		lineageTag: b577e6b7-e92c-4653-9ad3-15be972c71f8
+		summarizeBy: none
+		sourceColumn: Service Name
+
+		annotation SummarizationSetBy = Automatic
+
+	column Personalizado
+		dataType: int64
+		formatString: 0
+		lineageTag: 83d16193-7d2c-4bfc-a114-f7c02b0d1227
+		summarizeBy: sum
+		sourceColumn: Personalizado
+
+		annotation SummarizationSetBy = Automatic
+
+	column Fecha
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 53083f4c-f626-43d4-8f57-96a5dca4dbe1
+		summarizeBy: none
+		sourceColumn: Fecha
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Supercategoria
+		dataType: string
+		lineageTag: 649e11f8-334f-41b8-9201-28498afcfdf2
+		summarizeBy: none
+		sourceColumn: Supercategoria
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Todos = m
+		mode: import
+		source =
+				let
+				    Origen = SharePoint.Files("https://kobacolombia-my.sharepoint.com/personal/pro_josue_hernandez_d1_com_co", [ApiVersion = 15]),
+				    #"Filas ordenadas" = Table.Sort(Origen,{{"Name", Order.Ascending}}),
+				    #"Filas filtradas" = Table.SelectRows(#"Filas ordenadas", each ([Folder Path] = "https://kobacolombia-my.sharepoint.com/personal/pro_josue_hernandez_d1_com_co/Documents/Aranda/Todos/")),
+				    #"Función personalizada invocada" = Table.AddColumn(#"Filas filtradas", "Transformar archivo", each #"Transformar archivo"([Content])),
+				    #"Columnas quitadas" = Table.RemoveColumns(#"Función personalizada invocada",{"Content", "Extension", "Date accessed", "Date created", "Attributes", "Folder Path"}),
+				    #"Se expandió Transformar archivo" = Table.ExpandTableColumn(#"Columnas quitadas", "Transformar archivo", {"Number Case", "Composite id", "Subject", "Registration date", "Status", "Client", "Category", "Service", "Responsable Name", "Author", "Reason", "Impact", "Urgency", "PriorityName", "Group Name", "Company", "CI", "RegistryType", "Estimated Date of Solution", "Estimated Date of Attention", "Hierarchy", "Department", "Floor", "City", "Country", "Headquarters", "Building", "Time elapsed", "Progress"}, {"Number Case", "Composite id", "Subject", "Registration date", "Status", "Client", "Category", "Service", "Responsable Name", "Author", "Reason", "Impact", "Urgency", "PriorityName", "Group Name", "Company", "CI", "RegistryType", "Estimated Date of Solution", "Estimated Date of Attention", "Hierarchy", "Department", "Floor", "City", "Country", "Headquarters", "Building", "Time elapsed", "Progress"}),
+				    #"Tipo cambiado" = Table.TransformColumnTypes(#"Se expandió Transformar archivo",{{"Name", type text}, {"Number Case", Int64.Type}, {"Composite id", type text}, {"Subject", type text}, {"Registration date", type datetime}, {"Status", type text}, {"Client", type text}, {"Category", type text}, {"Service", type text}, {"Responsable Name", type text}, {"Author", type text}, {"Reason", type text}, {"Impact", type text}, {"Urgency", type text}, {"PriorityName", type text}, {"Group Name", type text}, {"Company", type text}, {"CI", type any}, {"RegistryType", type text}, {"Estimated Date of Solution", type datetime}, {"Estimated Date of Attention", type datetime}, {"Hierarchy", type text}, {"Department", type text}, {"Floor", type any}, {"City", type text}, {"Country", type text}, {"Headquarters", type text}, {"Building", type any}, {"Time elapsed", Int64.Type}, {"Progress", Int64.Type}}),
+				    #"Filas ordenadas1" = Table.Buffer(Table.Sort(#"Tipo cambiado",{{"Registration date", Order.Ascending}, {"Date modified", Order.Descending}})),
+				    #"Duplicados quitados" = Table.Distinct(#"Filas ordenadas1", {"Composite id"}),
+				    #"Columnas quitadas1" = Table.RemoveColumns(#"Duplicados quitados",{"Name", "Date modified", "Reason", "Company", "CI", "Country", "Headquarters", "Building"}),
+				    #"Personalizada agregada" = Table.AddColumn(#"Columnas quitadas1", "Service Name", each if [Service] = "INC_Power BI" then "Incident" else "Service Call", type text),
+				    #"Personalizada agregada1" = Table.AddColumn(#"Personalizada agregada", "Personalizado", each Date.WeekOfYear(DateTime.Date([Registration date]))),
+				    #"Tipo cambiado1" = Table.TransformColumnTypes(#"Personalizada agregada1",{{"Personalizado", Int64.Type}}),
+				    #"Personalizada agregada2" = Table.AddColumn(#"Tipo cambiado1", "Supercategoria", each let cat = [Category] in
+				    if List.Contains({"Modificación de accesos", "Crear usuario", "Inactivar usuario", "INC_Error de acceso"}, cat) then "Gestión de Accesos y Usuarios"
+				    else if List.Contains({"Generar reporte"}, cat) then "Nuevos Requerimientos y Desarrollos"
+				    else if List.Contains({"INC_Calculos en reportes", "INC_Carga de información data erroneo", "INC_Carga de información duplicada"}, cat) then "Inconsistencias y Calidad de Datos"
+				    else if List.Contains({"INC_Carga de información error en fuente de datos", "INC_Carga de información error en comunicación", "INC_Alertamiento", "INC_Objetos error de configuración"}, cat) then "Ingeniería y Flujos de Datos"
+				    else if List.Contains({"Capacitación de reportes/herramienta", "Configuración", "Instalación de prerrequisitos"}, cat) then "Soporte y Capacitación"
+				    else if List.Contains({"Evento de Seguridad"}, cat) then "Seguridad"
+				    else "Otras Categorías"),
+				    #"Fecha insertada" = Table.AddColumn(#"Personalizada agregada2", "Fecha", each Date.From([Registration date]), type date)
+				in
+				    #"Fecha insertada"
+
+	annotation PBI_NavigationStepName = Navegación
+
+	annotation PBI_ResultType = Table
+
