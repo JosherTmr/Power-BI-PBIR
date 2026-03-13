@@ -61,7 +61,7 @@
             "startDate": {
               "expr": {
                 "Literal": {
-                  "Value": "datetime'2025-09-01T00:00:00'"
+                  "Value": "datetime'2026-02-15T00:00:00'"
                 }
               }
             },
@@ -137,7 +137,7 @@
                         },
                         "Right": {
                           "Literal": {
-                            "Value": "datetime'2025-09-01T00:00:00'"
+                            "Value": "datetime'2026-02-15T00:00:00'"
                           }
                         }
                       }

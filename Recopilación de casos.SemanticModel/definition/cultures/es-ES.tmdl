@@ -2884,7 +2884,7 @@ cultureInfo es-ES
 			          }
 			        },
 			        {
-			          "Tipo de servicio": {
+			          "Tipo de caso": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
@@ -2894,7 +2894,7 @@ cultureInfo es-ES
 			          }
 			        },
 			        {
-			          "Tipo de caso": {
+			          "Tipo de servicio": {
 			            "State": "Suggested",
 			            "Source": {
 			              "Type": "External",
