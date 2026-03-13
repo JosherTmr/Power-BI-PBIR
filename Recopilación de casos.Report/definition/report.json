@@ -1,5 +1,5 @@
 {
-  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.1.0/schema.json",
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/report/3.2.0/schema.json",
   "themeCollection": {
     "baseTheme": {
       "name": "CY24SU10",
@@ -58,14 +58,14 @@
       "type": "SharedResources",
       "items": [
         {
-          "name": "CY24SU10",
-          "path": "BaseThemes/CY24SU10.json",
-          "type": "BaseTheme"
-        },
-        {
           "name": "AccessibleOrchid",
           "path": "BuiltInThemes/AccessibleOrchid.json",
           "type": "CustomTheme"
+        },
+        {
+          "name": "CY24SU10",
+          "path": "BaseThemes/CY24SU10.json",
+          "type": "BaseTheme"
         }
       ]
     }
